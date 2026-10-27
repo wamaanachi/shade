@@ -1,27 +1,15 @@
 use std::io;
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
+use ratatui::DefaultTerminal;
 
-pub fn run(){
+// im lowk gonna be building the importtant things now
+pub fn run() -> io::Result<()>{
 
-    loop {
-    crate::ui::draw_menu();
+    let mut terminal = ratatui::init();
 
-    println!("pick a shader:  1, 2, 3, 4 or q");
+    let result = run_loop(&mut terminal);
 
-    let mut input = String::new();
-    
-    io::stdin()
-        .read_line(&mut input)
-        .expect("smthin went wrong");
+    ratatui::restore();
 
-    let choice = input.trim();
-
-    match choice {
-        "1" => println!("selected smthin1"),
-        "2" => println!("selected smthin2"),
-        "3" => println!("selected smthin3"),
-        "4" => println!("selected smthin4"),
-        "q" => break,
-        _ => println!("pick one of em bruh"),
-    }
-  }    
-}
+    result
+} 

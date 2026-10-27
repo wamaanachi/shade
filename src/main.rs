@@ -2,6 +2,6 @@ mod app;
 mod ui;
 mod shaders;
 
-fn main() {
+fn main() -> std::io::Result<()> {
     app::run();    
 }
