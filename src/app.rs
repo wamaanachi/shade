@@ -1,3 +1,23 @@
+use std::io;
+
 pub fn run(){
     crate::ui::draw_menu();
+
+    println!("pick a shader:  1, 2, 3, 4");
+
+    let mut input = String::new();
+    
+    io::stdin()
+        .read_line(&mut input)
+        .expect("smthin went wrong");
+
+    let choice = input.trim();
+
+    match choice {
+        "1" => println!("selected smthin1"),
+        "2" => println!("selected smthin2"),
+        "3" => println!("selected smthin3"),
+        "4" => println!("selected smthin4"),
+        _ => println!("pick one of em bruh"),
+    }
 }
