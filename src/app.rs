@@ -9,6 +9,8 @@ pub struct App {
     pub values: [f32; 4],
     pub fps: f32,
     pub fullscreen: bool,
+    pub paused: bool,
+    pub time f32,
 }
 
 // im lowk gonna be building the importtant things now
@@ -31,6 +33,8 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         values: [1.0, 1.0, 0.0, 1.0],  // these are the things i wrote in control btw
         fps: 0.0,
         fullscreen: false,
+        pasued: false,
+        time: 0,0,
     };
 
     let shader_count = crate::shaders::name().len();
@@ -40,9 +44,19 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
     let mut fps_timer = Instant::now();
     let mut frames = 0;
 
+    let mut previous_frame = Instant::now();
+
     loop {
 
         let frame_start = Instant::now();
+
+        let listening_to_drake_rn = frame_start.duration_since(preview_frame).as_secs_f32();
+        
+        preview_frame = frame_start;
+
+        if !app.paused {
+            app.time += listening_to_drake_rn;
+        }
 
         terminal.draw(|frame| {
             crate::ui::draw(frame, &app);
@@ -89,6 +103,10 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
 
                 KeyCode::Char('f') => {
                     app.fullscreen = !app.fullscreen;
+                }
+
+                KeyCode::Char(' ') => {
+                    app.pasued = !app.paused;
                 }
                 _ => {}
                 }

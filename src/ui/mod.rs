@@ -101,9 +101,14 @@ pub fn draw(frame: &mut Frame, app: &App){
 fn draw_preview(frame: &mut Frame, area: Rect, app: &App){
     let names = crate::shaders::name();
 
+    let status = if app.pasued { "Paused" } else { "Running" };
+
     let text = format!(
-        "Selected: {}\n\nf: toggle fullscreen | q: quit",
+        // this shi is really confusing me
+        "Selected: {}\n\nStatus: {}\nTime: {:.1}s\n\nSpace: pause/resume | f: toggle fullscreen | q: quit",
         names[app.selected],
+        status,
+        app.time,
     );
 
     let preview = Paragraph::new(text)
