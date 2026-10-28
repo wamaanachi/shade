@@ -47,4 +47,16 @@ pub fn draw(frame: &mut Frame, selected: usize){
     let mut list_state = ListState::default();
     list_state.select(Some(selected));
 
+    frame.render_stateful_widget(shader_list, columns[0], &mut list_state);
+
+    let the_text = format!("Selcted: {}\n\n", names[selected],);
+
+    let preview = Paragraph::new(preview_text)
+            .block(Block::bordered().title(" Preview "));
+
+        frame.render_widget(preview, right[0]);
+
+    let footer = Paragraph::new("Up/Down: select |  q: quit").style(Style::default().fg(Color::Cyan)); // cyan is cool!
+
+    frame.render_widget(footerm rows[2]);
 }
