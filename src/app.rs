@@ -26,14 +26,14 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         let event = event::read()?;
 
         if let Event::Key(key) = event {
-            if key.kind != ?KeyEventKind::Press {
+            if key.kind != KeyEventKind::Press {
                 continue;
             }
 
             match key.code {
                 KeyCode::Char('q') => return Ok(()),
 
-                KeyCode:Down => {
+                KeyCode::Down => {
                     if selected + 1 < shader_count {
                         selected += 1;
                     }
@@ -44,7 +44,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                         selected -= 1;
                     }
                 }
-                _ = {}
+                _ => {}
             }
         }
     }

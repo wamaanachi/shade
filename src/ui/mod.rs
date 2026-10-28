@@ -21,7 +21,7 @@ pub fn draw(frame: &mut Frame, selected: usize){
         Constraint::Percentage(25),
         Constraint::Percentage(75),
     ])
-    .split([rows[1]]);
+    .split(rows[1]);
 
         let right = Layout::vertical([
             Constraint::Min(0),
@@ -32,12 +32,12 @@ pub fn draw(frame: &mut Frame, selected: usize){
     let title = Paragraph::new("Shade")
             .block(Block::bordered());
 
-    frame.render_widget(title, rows([0]));
+    frame.render_widget(title, rows[0]);
 
-    let names = crate:shaders::name();
+    let names = crate::shaders::name();
 
     let shader_list = List::new(names)
-            .block(bordered().title(" Shaders "))
+            .block(Block::bordered().title(" Shaders "))
             .highlight_symbol("> ")
             .highlight_style(
                 Style::default()
@@ -51,12 +51,12 @@ pub fn draw(frame: &mut Frame, selected: usize){
 
     let the_text = format!("Selcted: {}\n\n", names[selected],);
 
-    let preview = Paragraph::new(preview_text)
+    let preview = Paragraph::new(the_text)
             .block(Block::bordered().title(" Preview "));
 
         frame.render_widget(preview, right[0]);
 
     let footer = Paragraph::new("Up/Down: select |  q: quit").style(Style::default().fg(Color::Cyan)); // cyan is cool!
 
-    frame.render_widget(footerm rows[2]);
+    frame.render_widget(footer, rows[2]);
 }
