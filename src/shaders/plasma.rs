@@ -14,7 +14,7 @@ fn palette(t: f32) -> [f32; 3] {
     let mut col = [0.0; 3];
 
     for i in 0..3 {
-        col[i] = a[i] + b[i] * (f32::consts::TAU * c[i] * t + d[i]);
+        col[i] = a[i] + b[i] * (f32::consts::TAU * c[i] * t + d[i]).cos();
     }
 
     col
@@ -53,9 +53,9 @@ impl Shader for NeonPlasma {
 
             d = (0.02 / d.max(0.001)).powf(1.2);
 
-            final_color[0] += col[0] + d * params.intensity;
-            final_color[1] += col[1] + d * params.intensity;
-            final_color[2] += col[2] + d * params.intensity;
+            final_color[0] += col[0] * d * params.intensity;
+            final_color[1] += col[1] * d * params.intensity;
+            final_color[2] += col[2] * d * params.intensity;
         }
 
         Color::from_normalized(final_color[0], final_color[1], final_color[2])
