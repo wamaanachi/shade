@@ -1,6 +1,6 @@
 use ratatui::{
     Frame,
-    layout::{Constraint, Layout},
+    layout::{Constraint, Layout, Rect},
     style::{Color, Style},
     widgets::{Block, List, ListState, Paragraph},
 };
@@ -8,6 +8,14 @@ use ratatui::{
 use crate::app::App;
 
 pub fn draw(frame: &mut Frame, app: &App){
+
+    if app.fullscreen {
+        let area = frame.area();
+
+        draw_preview(frame, area, app);
+
+        return;
+    }
 
     let selected = app.selected;
     
@@ -53,12 +61,7 @@ pub fn draw(frame: &mut Frame, app: &App){
 
     frame.render_stateful_widget(shader_list, columns[0], &mut list_state);
 
-    let the_text = format!("Selcted: {}\n\n", names[selected],);
-
-    let preview = Paragraph::new(the_text)
-            .block(Block::bordered().title(" Preview "));
-
-        frame.render_widget(preview, right[0]);
+            draw_preview(frame, right[0], app);
 
         let labels = ["Speed", "Zoom", "Color shift", "Intensity"];
         let mut text = String::new();
@@ -84,7 +87,7 @@ pub fn draw(frame: &mut Frame, app: &App){
         let area = frame.area();
 
         let footer_text = format!(
-            "Up/Down: shader | Tab: controls | Left/Right: adjust | r: reset | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
+            "Up/Down: shader | Tab: controls | Left/Right: adjust | r: reset | f: fullscreen | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
             app.fps,
             area.width,
             area.height,
@@ -93,4 +96,18 @@ pub fn draw(frame: &mut Frame, app: &App){
     let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Cyan)); // cyan is cool!
 
     frame.render_widget(footer, rows[2]);
+}
+
+fn draw_preview(frame: &mut Frame, area: Rect, app: &App){
+    let names = crate::shaders::name();
+
+    let text = format!(
+        "Selected: {}\n\nf: toggle fullscreen | q: quit",
+        names[app.selected],
+    );
+
+    let preview = Paragraph::new(text)
+        .block(Block::bordered().title(" Preview "));
+
+    frame.render_widget(preview, area);
 }

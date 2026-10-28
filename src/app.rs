@@ -8,6 +8,7 @@ pub struct App {
     pub control: usize,
     pub values: [f32; 4],
     pub fps: f32,
+    pub fullscreen: bool,
 }
 
 // im lowk gonna be building the importtant things now
@@ -29,6 +30,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         control: 0,
         values: [1.0, 1.0, 0.0, 1.0],  // these are the things i wrote in control btw
         fps: 0.0,
+        fullscreen: false,
     };
 
     let shader_count = crate::shaders::name().len();
@@ -83,6 +85,10 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
 
                 KeyCode::Char('r') => {
                     app.values = [1.0, 1.0, 0.0, 1.0];
+                }
+
+                KeyCode::Char('f') => {
+                    app.fullscreen = !app.fullscreen;
                 }
                 _ => {}
                 }
