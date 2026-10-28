@@ -25,7 +25,7 @@ pub fn draw(frame: &mut Frame, selected: usize){
 
         let right = Layout::vertical([
             Constraint::Min(0),
-            Constraint::Length(5),
+            Constraint::Length(6), // might change this again tbh
         ])
         .split(columns[1]);
 
@@ -55,6 +55,11 @@ pub fn draw(frame: &mut Frame, selected: usize){
             .block(Block::bordered().title(" Preview "));
 
         frame.render_widget(preview, right[0]);
+
+        let controls = Paragraph::new("Speed: 1.0\nColor shift: 0.0\nIntensity: 1.0",)
+        .block(Block::bordered().title(" Controls "));
+
+        frame.render_widget(controls, right[1]);
 
     let footer = Paragraph::new("Up/Down: select |  q: quit").style(Style::default().fg(Color::Cyan)); // cyan is cool!
 
