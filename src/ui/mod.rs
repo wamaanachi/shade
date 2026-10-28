@@ -30,8 +30,8 @@ pub fn draw(frame: &mut Frame, app: &App){
     
     // the responsive thingy
     let columns = Layout::horizontal([
-        Constraint::Percentage(25),
-        Constraint::Percentage(75),
+        Constraint::Length(15),
+        Constraint::Min(0),
     ])
     .split(rows[1]);
 
