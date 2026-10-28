@@ -101,7 +101,7 @@ pub fn draw(frame: &mut Frame, app: &App){
 fn draw_preview(frame: &mut Frame, area: Rect, app: &App){
     let names = crate::shaders::name();
 
-    let status = if app.pasued { "Paused" } else { "Running" };
+    let status = if app.paused { "Paused" } else { "Running" };
 
     let text = format!(
         // this shi is really confusing me
