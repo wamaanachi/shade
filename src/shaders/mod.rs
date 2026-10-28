@@ -1,3 +1,5 @@
+pub mod plasma;
+
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Color {
     r: u8,
