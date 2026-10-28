@@ -5,12 +5,16 @@ use ratatui::{
     widgets::{Block, List, ListState, Paragraph},
 };
 
-pub fn draw(frame: &mut Frame, selected: usize){
+use crate::app::App;
+
+pub fn draw(frame: &mut Frame, app: &App){
+
+    let selected = app.selected;
     
     let rows = Layout::vertical([
         Constraint::Length(3),
         Constraint::Min(0),
-        Constraint::Length(1),
+        Constraint::Length(2),
     ])
     .split(frame.area());
 
@@ -56,12 +60,37 @@ pub fn draw(frame: &mut Frame, selected: usize){
 
         frame.render_widget(preview, right[0]);
 
-        let controls = Paragraph::new("Speed: 1.0\nColor shift: 0.0\nIntensity: 1.0",)
-        .block(Block::bordered().title(" Controls "));
+        let labels = ["Speed", "Zoom", "Color shift", "Intensity"];
+        let mut text = String::new();
+        
+        for index in 0..4 {
+            let marker = if index == app.control { ">" } else { " " };
 
-        frame.render_widget(controls, right[1]);
+            let line = format!(
+                "{} {}: {:.1}\n",
+                marker,
+                labels[index],
+                app.values[index],
+            );
 
-    let footer = Paragraph::new("Up/Down: select |  q: quit").style(Style::default().fg(Color::Cyan)); // cyan is cool!
+            text.push_str(&line);
+        }
+// the paragraph thing is getting used so often
+        let controls = Paragraph::new(text)
+            .block(Block::bordered().title(" Controls: Tab / Left / Right "));
+
+            frame.render_widget(controls, right[1]);
+
+        let area = frame.area();
+
+        let footer_text = format!(
+            "Up/Down: shader | Tab: controls | Left/Right: adjust | r: reset | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
+            app.fps,
+            area.width,
+            area.height,
+        );
+
+    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Cyan)); // cyan is cool!
 
     frame.render_widget(footer, rows[2]);
 }

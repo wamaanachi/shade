@@ -43,7 +43,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         let frame_start = Instant::now();
 
         terminal.draw(|frame| {
-            crate::ui::draw(frame, app.selected);
+            crate::ui::draw(frame, &app);
         })?;
 
         frames +=1;
@@ -97,11 +97,11 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
 fn change_control(app: &mut App, amount: f32){
     // lowk im not sure about these, but too tired too ask rn will change em later ig
 
-    let minimums = [0.5, 0.5. 0.0, 2.0];
+    let minimums = [0.5, 0.5, 0.0, 0.0];
     let maximums = [3.0, 5.0, 1.0, 2.0]; 
 
     let index = app.control;
 
-    app.values[index] = (app.values[index] + amoutn)
+    app.values[index] = (app.values[index] + amount)
         .clamp(minimums[index], maximums[index]);
 }
