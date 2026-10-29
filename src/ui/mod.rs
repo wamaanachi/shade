@@ -2,7 +2,7 @@ use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
     style::{Color, Style},
-    widgets::{Block, List, ListState, Paragraph},
+    widgets::{Block, List, ListState, Paragraph, Gauge},
 };
 
 use crate::app::App;
@@ -18,7 +18,8 @@ pub fn draw(frame: &mut Frame, app: &App){
 
         frame.render_widget(message, area);
 
-        return;
+        return; 
+        
     }
 
     if app.fullscreen {
@@ -75,26 +76,32 @@ pub fn draw(frame: &mut Frame, app: &App){
 
             draw_preview(frame, right[0], app);
 
-        let labels = ["Speed", "Zoom", "Color shift", "Intensity"];
-        let mut text = String::new();
+            // check ui/sliders.rs, i decided to replace the plain texts with sliders which look so cool
+            // so umm this is just no longer required
+
+//         let labels = ["Speed", "Zoom", "Color shift", "Intensity"];
+//         let mut text = String::new();
         
-        for index in 0..4 {
-            let marker = if index == app.control { ">" } else { " " };
+//         for index in 0..4 {
+//             let marker = if index == app.control { ">" } else { " " };
 
-            let line = format!(
-                "{} {}: {:.1}\n",
-                marker,
-                labels[index],
-                app.values[index],
-            );
+//             let line = format!(
+//                 "{} {}: {:.1}\n",
+//                 marker,
+//                 labels[index],
+//                 app.values[index],
+//             );
 
-            text.push_str(&line);
-        }
-// the paragraph thing is getting used so often
-        let controls = Paragraph::new(text)
-            .block(Block::bordered().title(" Controls: Tab / Left / Right "));
+//             text.push_str(&line);
+//         }
+// // the paragraph thing is getting used so often
+//         let controls = Paragraph::new(text)
+//             .block(Block::bordered().title(" Controls: Tab / Left / Right "));
 
-            frame.render_widget(controls, right[1]);
+//             frame.render_widget(controls, right[1]);
+
+
+// so im going to replace he plain text with sliders, might delete the code soon
 
         let area = frame.area();
 
