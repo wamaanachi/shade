@@ -1,6 +1,6 @@
-pub fn name() -> [&'static str; 4]{
+pub fn name() -> [&'static str; 1]{
     // umm yeah
-    ["smthin1", "smthin2", "smthin3", "smthin4"]
+    ["Plasma Neon"]
 }
 
 pub mod plasma;
