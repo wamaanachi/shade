@@ -9,6 +9,18 @@ use crate::app::App;
 
 pub fn draw(frame: &mut Frame, app: &App){
 
+    let area = frame.area();
+
+    if area.width < 80 || area.height < 20 {
+        let message = Paragraph::new(
+            "Terminal is too small, resize it"
+        );
+
+        frame.render_widget(message, area);
+
+        return;
+    }
+
     if app.fullscreen {
         let area = frame.area();
 
