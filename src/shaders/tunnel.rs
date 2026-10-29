@@ -20,7 +20,7 @@ impl Shader for CyberTunnel {
 
         let r = length(u, v);
 
-        let depth = 1.0 / r;
+        let depth = 1.0 / r.max(0.01);
         let angle = v.atan2(u);
 
         let rings = (depth * 8.0 + time).sin();
@@ -28,7 +28,11 @@ impl Shader for CyberTunnel {
 
         let pattern = rings * base;
 
-        let final_col = step(0.1, pattern);
+        let fog = (r * 1.8).clamp(0.0, 1.0);
+
+        let mut final_col = step(0.0, pattern);
+
+        final_col *= fog;
 
         Color::from_normalized(final_col, final_col, final_col)
     }
