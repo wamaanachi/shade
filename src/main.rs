@@ -3,12 +3,12 @@ use std::{
     time::Instant,
 };
 
-use crate::shaders::{Shader, ShaderParams, plasma::NeonPlasma};
+use crate::shaders::{Shader, ShaderParams, tunnel::CyberTunnel};
 
 pub mod shaders;
 
 fn main() {
-    let shader = NeonPlasma;
+    let shader = CyberTunnel;
     let params = ShaderParams::default();
     let start = Instant::now();
     let mut stdout = stdout();

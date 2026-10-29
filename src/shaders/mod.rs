@@ -1,5 +1,7 @@
 pub mod plasma;
+pub mod tunnel;
 
+/// The RGB Channel Color bytes
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Color {
     pub r: u8,
@@ -30,6 +32,8 @@ impl Color {
 }
 
 /// Paramter's that TUI can adjust on sliders
+/// Yall can also prolly store some presets
+/// of values in this struct
 #[derive(Clone, Copy)]
 pub struct ShaderParams {
     pub speed: f32,       //like, from 0.5x to 3.0x
@@ -52,5 +56,6 @@ impl Default for ShaderParams {
 pub trait Shader {
     fn name(&self) -> &'static str;
 
+    /// The real rendering logic, in openGL, this would be mainImage()
     fn evaluate(&self, uv: (f32, f32), time: f32, params: &ShaderParams) -> Color;
 }
