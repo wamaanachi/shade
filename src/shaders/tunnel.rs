@@ -34,6 +34,12 @@ impl Shader for CyberTunnel {
 
         final_col *= fog;
 
-        Color::from_normalized(final_col, final_col, final_col)
+        let (red, green, blue) = if final_col > 0.5 {
+            (0.0 * r, 0.8 * r, 1.0 * r)
+        } else {
+            (0.4 * r, 0.05 * r, 0.6 * r)
+        };
+
+        Color::from_normalized(red, green, blue)
     }
 }
