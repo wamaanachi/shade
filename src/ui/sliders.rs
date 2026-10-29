@@ -7,7 +7,7 @@ use ratatui::{
 
 use crate::app::App;
 
-fn draw_sliders(frame: &mut Frame, area: Rect,  app: &App){
+pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
     let border = Block::bordered()
         .title("Controls: Tab to select | Left/Righ: to change values");
 
@@ -45,12 +45,15 @@ fn draw_sliders(frame: &mut Frame, area: Rect,  app: &App){
 
             let marker = if selected {">"} else {" "};
 
-            let name = Paragrap::new(
+            let name = Paragraph::new(
                 format!("{} {}", marker, labels[index]),
             )
             .style(Style::default().fg(color));
 
             frame.render_widget(name, columns[0]);
+
+            // umm so this is the thing to calculate the value from the slider, lil complicated lol. looked it up
+            let ratio = (app.values[index] - minimums[index]) / (maximums[index] - minimums[index]);
 
             let slider = Gauge::default()
                 .ratio(ratio.clamp(0.0, 1.0) as f64)

@@ -1,8 +1,10 @@
+mod sliders;
+
 use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
     style::{Color, Style},
-    widgets::{Block, List, ListState, Paragraph, Gauge},
+    widgets::{Block, List, ListState, Paragraph},
 };
 
 use crate::app::App;
@@ -75,6 +77,8 @@ pub fn draw(frame: &mut Frame, app: &App){
     frame.render_stateful_widget(shader_list, columns[0], &mut list_state);
 
             draw_preview(frame, right[0], app);
+
+            sliders::draw(frame, right[1], app);
 
             // check ui/sliders.rs, i decided to replace the plain texts with sliders which look so cool
             // so umm this is just no longer required
