@@ -4,18 +4,19 @@ use clap::{Parser, Subcommand};
 #[command(author, version, about, long_about = None)]
 pub(crate) struct CliArgs {
     #[command(subcommand)]
-    command: Command,
+    pub(crate) command: Command,
 
     #[arg(
         long = "shader",
     )]
-    shader: String,
+    pub(crate) shader: String,
 
     #[arg(
         long = "speed",
     )]
-    speed: f32
+    pub(crate) speed: f32
 }
+
 
 #[derive(Subcommand, Debug, Clone)]
 pub(crate) enum Command {
