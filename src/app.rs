@@ -105,22 +105,20 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                         }
                     }
                         else {
-                            if app.control < 3 {
-                                app.control += 1;
+                        // umm gonna make it so that the last control will take you to the first one when you press the up/down and vice versa. 
+                                app.control = (app.control + 1) % 4;
                             }
                         }
-                    }
+                    
                 KeyCode::Up => {
                     if app.focus == Focus::Gallery {
                         if app.selected > 0 {
                             app.selected -= 1;
                         }
                     } else {
-                        if app.control > 0 {
-                            app.control -= 1;
+                            app.control = (app.control + 3) % 4;
                         }
                 }
-            }
                 KeyCode::Left => {
                     if app.focus == Focus::Controls {
                         change_control(&mut app, -0.1);
