@@ -193,3 +193,66 @@ fn change_control(app: &mut App, amount: f32){
     app.values[index] = (app.values[index] + amount)
         .clamp(minimums[index], maximums[index]);
 }
+
+fn handle_mouse(app: &mut App, mouse: &MouseEvent){
+    match mouse.kind {
+        MouseEventKind::Down(MouseButton::Left) => {
+            app.dragging = None;
+
+            for index in 0..4 {
+                let area = app.slider_areas[index];
+
+                // mehh the code is like similar to the once i wrote previously (when it used keys to control the sliders) so nothing new much
+                if mouse.column >= area.x
+                    && mouse.column < area.right()
+                    && mouse.row >= area.y
+                    && mouse.row < area.bottom()
+                    {
+                        app.focus = Focus::Controls;
+                        app.control = index;
+                        app.dragging = Some(index);
+
+                        the_function_for_the_functioning_of_mouse_from_the_slider(app, index, mouse.column);
+                        break;
+                    }
+            }
+        }
+        // bruhh this shi is taking so much time.
+        // doesnt even have proper documentantions
+
+        MouseEventKind::Drag(MouseButton::Left) => {
+            if let Some(index) = app.dragging {
+                the_function_for_the_functioning_of_mouse_from_the_slider(app, index, mouse.column);
+            }
+        }
+
+        MouseEventKind::Up(MouseButton::Left) => {
+            app.dragging = None;
+        }
+        _ => {}
+    }
+}
+
+// lol
+
+fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, index: usize, column: u16){
+    let area = app.slider_areas[index];
+
+    if app.width < 2 {
+        return;
+    }
+
+    let minimums = [0.5, 0.5, 0.0, 0.0];
+    let maximums = [3.0, 5.0, 1.0, 2.0];
+
+    // tuff shit
+    let position = column as f32 - area.x as f32;
+    let ratio = (position / (area.width - 1) as f32)
+        .clamp(0.0, 1.0);
+
+        // bruh fuck this shit
+        // why doesnt this shit work
+    let value = minimums[index] + ratio * (maximums[index]);
+
+    app.values[index] = (value * 10.0).round() / 10.0;
+}
