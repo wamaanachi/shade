@@ -3,6 +3,12 @@ use std::time::{Duration, Instant};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::DefaultTerminal;
 
+use ratatui::layout::Rect;
+use crossterm::event::{
+    EnableMouseCapture, DisableMouseCapture,
+    MouseButton, MouseEvent, MouseEventKind,
+};
+
 #[derive(PartialEq)]
 pub enum Focus {
     Gallery,
@@ -18,6 +24,8 @@ pub struct App {
     pub paused: bool,
     pub time: f32,
     pub focus: Focus,
+    pub sliders_areas: [Rect; 4],
+    pub dragging: Option<usize>,
 }
 
 // im lowk gonna be building the importtant things now
@@ -25,11 +33,22 @@ pub fn run() -> io::Result<()>{
 
     let mut terminal = ratatui::init();
 
-    let result = run_loop(&mut terminal);
+    let result = match crossterm::execute!(
+        io::stdout(),
+        EnableMouseCapture
+    ){
+        Ok(()) => run_loop(&mut terminal),
+        Err(error) => Err(error),
+    };
+
+    let cleanup = crossterm::execute!(
+        io::stdout(),
+        DisableMouseCapture
+    );
 
     ratatui::restore();
 
-    result
+    result.and(cleanup)
 } 
 
 fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
@@ -43,6 +62,8 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         paused: false,
         time: 0.0,
         focus: Focus::Gallery,
+        sliders_areas: [Rect::default(); 4],
+        dragging: None,
     };
 
     let shader_count = crate::shaders::name().len();
@@ -67,7 +88,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         }
 
         terminal.draw(|frame| {
-            crate::ui::draw(frame, &app);
+            crate::ui::draw(frame, &mut app);
         })?;
 
         frames +=1;
