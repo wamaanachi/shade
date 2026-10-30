@@ -30,9 +30,7 @@ pub(crate) enum Command {
 #[derive(Subcommand, Debug, Clone)]
 pub(crate) enum ListWhat {
     Shaders {},
-    History {
-        what_history: Option<String>,
-    }
+    History {}
 }
 
 // • Amaan: CLI, Config & Systems:
