@@ -26,7 +26,7 @@ pub(crate) fn test_config() {
 
 
 fn get_base_dir() -> Result<BaseDirs, u8> {
-    let dirs = BaseDirs::new();
+    let dirs: Option<BaseDirs> = BaseDirs::new();
 
     if dirs.is_some() {
         Ok(dirs.unwrap())
