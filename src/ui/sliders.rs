@@ -19,7 +19,7 @@ pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
     };
 
     let border = Block::bordered()
-        .title(" Controls: Up/Down selects | Left/Righ: to change values");
+        .title(" Controls: Up/Down selects | Left/Righ: to change values")
         .border_style(Style::default().fg(border_color));
 
         let inside = border.inner(area);

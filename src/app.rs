@@ -4,7 +4,7 @@ use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::DefaultTerminal;
 
 #[derive(PartialEq)]
-pub enum focus {
+pub enum Focus {
     Gallery,
     Controls,
 }
@@ -96,6 +96,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                     else {
                         Focus::Gallery
                     };
+                }
 
                 KeyCode::Down => {
                     if app.focus == Focus::Gallery {
@@ -105,7 +106,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                     }
                         else {
                             if app.control < 3 {
-                                app.contol += 1;
+                                app.control += 1;
                             }
                         }
                     }
@@ -114,8 +115,12 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                         if app.selected > 0 {
                             app.selected -= 1;
                         }
-                    }
+                    } else {
+                        if app.control > 0 {
+                            app.control -= 1;
+                        }
                 }
+            }
                 KeyCode::Left => {
                     if app.focus == Focus::Controls {
                         change_control(&mut app, -0.1);
@@ -130,10 +135,10 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
 
                 KeyCode::Char('r') => {
                     if app.focus == Focus::Controls {
-                        app.values = [1.0, 1.0, 0.0. 1.0];
+                        app.values = [1.0, 1.0, 0.0, 1.0];
                     }
                 }
-                }
+                
                 KeyCode::Char('f') => {
                     app.fullscreen = !app.fullscreen;
                 }
