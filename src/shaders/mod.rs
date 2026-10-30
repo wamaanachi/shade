@@ -1,3 +1,5 @@
+use serde::{ Deserialize, Serialize };
+
 pub mod plasma;
 pub mod show;
 
@@ -31,7 +33,7 @@ impl Color {
 }
 
 /// Paramter's that TUI can adjust on sliders
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct ShaderParams {
     pub speed: f32,       //like, from 0.5x to 3.0x
     pub zoom: f32,        //like fromm 0.5x to 5.0x
