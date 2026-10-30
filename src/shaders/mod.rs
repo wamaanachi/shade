@@ -1,4 +1,5 @@
 pub mod plasma;
+pub mod show;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Color {
