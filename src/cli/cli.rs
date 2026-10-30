@@ -18,9 +18,11 @@ pub(crate) struct CliArgs {
 }
 
 
-#[derive(Subcommand, Debug, Clone)]
+#[derive(Subcommand, Debug)]
 pub(crate) enum Command {
-    Run {},
+    Run {
+        shader: String,
+    },
     List {
         #[command(subcommand)]
         list_what: ListWhat,
