@@ -75,6 +75,24 @@ impl Shader for Mountains {
             }
         }
 
+        // The mountain is looking awesome! We have snow on the fuji too!
+        // Now time for petals! I will try with figuring out a single petal
+
+        let t = time * params.speed;
+
+        //how petal moves on y coord
+        let petal_y = 0.8 - (t * 0.3) % 2.0;
+
+        let x_loop = (t * 0.2) % 2.4;
+        //how petal moves on x axis
+        let petal_x = (x_loop - 1.2) + (t * 2.0).sin() * 0.04;
+
+        let p_dist = ((u - petal_x).powi(2) + (v - petal_y).powi(2)).sqrt();
+
+        if p_dist < 0.03 {
+            col = [0.98, 0.72, 0.80];
+        }
+
         Color::from_normalized(col[0], col[1], col[2])
     }
 }
