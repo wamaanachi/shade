@@ -62,6 +62,19 @@ impl Shader for Mountains {
             col = [0.85, 0.20, 0.20];
         }
 
+        let x = u.abs().max(0.08);
+
+        let mountain_h = 0.35 - (x - 0.08).powf(0.85) * 0.8;
+
+        if v < mountain_h {
+            let snowline = -0.25 + (u * 25.0).sin() * 0.03;
+            if v > snowline {
+                col = [0.95, 0.95, 0.98];
+            } else {
+                col = [0.45, 0.15, 0.12];
+            }
+        }
+
         Color::from_normalized(col[0], col[1], col[2])
     }
 }
