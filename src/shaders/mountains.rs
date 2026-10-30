@@ -2,6 +2,17 @@ use super::{Color, Shader, ShaderParams};
 
 pub struct Mountains;
 
+fn lerp(a: [f32; 3], b: [f32; 3], t: f32) -> [f32; 3] {
+    let mut out = [0.0; 3];
+
+    // let r = ctop[0] * (1.0 - t) + cbot[0] * t;
+    for i in 0..3 {
+        out[i] = a[i] * (1.0 - t) + b[i] * t;
+    }
+
+    out
+}
+
 impl Shader for Mountains {
     fn name(&self) -> &'static str {
         "Misty Mountains"
@@ -19,21 +30,38 @@ impl Shader for Mountains {
         // and finally, small sakura fall.. would look fabulous.
         //
         // Let's get started!!
-        //
 
         // v from (u, v) dictates values on y axis, let's make modify color of that part
+        //
+        // So What I tried to do is called lerp (hehe), like linear interpolation
+        // and hence I will jst move lerp-ing into separate function
         let mut t = ((v + 1.0) / 2.0).clamp(0.0, 1.0);
         t = t.powf(1.5);
         let ctop = [0.98, 0.53, 0.50];
         let cbot = [0.30, 0.37, 0.43];
 
-        let r = ctop[0] * (1.0 - t) + cbot[0] * t;
-        let g = ctop[1] * (1.0 - t) + cbot[1] * t;
-        let b = ctop[2] * (1.0 - t) + cbot[2] * t;
+        let sky_color = lerp(cbot, ctop, t);
+
+        let mut col = sky_color;
 
         //now colors look so much better!!
         //let's get that sun in the place now...
+        //
 
-        Color::from_normalized(r, g, b)
+        //Defining a random coordinate for sun
+        let x0: f32 = 0.35;
+        let y0: f32 = 0.15;
+
+        let dx = u - x0;
+        let dy = v - y0;
+
+        let dist = (dx * dx + dy * dy).sqrt();
+
+        //0.35 here is radius of sun
+        if dist < 0.35 {
+            col = [0.85, 0.20, 0.20];
+        }
+
+        Color::from_normalized(col[0], col[1], col[2])
     }
 }
