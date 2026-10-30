@@ -6,15 +6,17 @@ pub(crate) struct CliArgs {
     #[command(subcommand)]
     pub(crate) command: Command,
 
-    #[arg(
-        long = "shader",
-    )]
-    pub(crate) shader: String,
+    #[arg(long)]
+    pub(crate) shader: Option<String>,
 
-    #[arg(
-        long = "speed",
-    )]
-    pub(crate) speed: f32
+    #[arg(long)]
+    pub(crate) speed: Option<f32>,
+
+    #[arg(long)]
+    pub(crate) intensity: Option<f32>,
+
+    #[arg(long)]
+    color_intensity: Option<f32>,
 }
 
 
