@@ -2,8 +2,12 @@ use std::path::{Path, PathBuf};
 use directories::BaseDirs;
 
 
+// --- MAIN THINGS ---
 pub(crate) const GROUP_NAME: &str = "wamaanachi";
 pub(crate) const APP_NAME: &str = "shade";
+
+// --- FILES ---
+pub(crate) const SHADER_LIST: &str = "shaders.json";
 
 pub(crate) fn load_config() {
     todo!(
