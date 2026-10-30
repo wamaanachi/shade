@@ -6,6 +6,8 @@ use std::{
 use crate::shaders::{Shader, ShaderParams, plasma::NeonPlasma};
 
 pub mod shaders;
+pub mod config;
+pub mod cli;
 
 fn main() {
     let shader = NeonPlasma;
