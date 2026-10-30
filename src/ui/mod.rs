@@ -7,7 +7,7 @@ use ratatui::{
     widgets::{Block, List, ListState, Paragraph},
 };
 
-use crate::app::App;
+use crate::app::{App, Focus};
 
 pub fn draw(frame: &mut Frame, app: &App){
 
@@ -63,13 +63,25 @@ pub fn draw(frame: &mut Frame, app: &App){
 
     let names = crate::shaders::name();
 
+    // gallery is the thing with the sahders'names btw
+    let gallery_color = if app.focus == Focus::Gallery {
+        Color::Cyan
+    }
+    else {
+        Color::Gray
+    };
+
+    let gallery_border = Block::bordered()
+        .title(" Shaders ")
+        .border_style(Style::default().fg(gallery_color));
+
     let shader_list = List::new(names)
-            .block(Block::bordered().title(" Shaders "))
+            .block(gallery_border)
             .highlight_symbol("> ")
             .highlight_style(
                 Style::default()
                 .fg(Color::Black)
-                .bg(Color::Cyan),
+                .bg(gallery_color),
             );
     let mut list_state = ListState::default();
     list_state.select(Some(selected));
@@ -110,7 +122,7 @@ pub fn draw(frame: &mut Frame, app: &App){
         let area = frame.area();
 
         let footer_text = format!(
-            "Up/Down: shader | Tab: controls | Left/Right: adjust | r: reset | f: fullscreen | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
+            "Tab: panel | Up/Down: select | Left/Right: adjust | r: reset | f: fullscreen | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
             app.fps,
             area.width,
             area.height,

@@ -5,11 +5,22 @@ use ratatui::{
     widgets::{Block, Gauge, Paragraph},
 };
 
-use crate::app::App;
+use crate::app::{App, Focus};
 
 pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
+
+    let focused = app.focus == Focus::Controls;
+
+    let border_color = if focused {
+        Color::Cyan
+    }
+    else {
+        Color::Gray
+    };
+
     let border = Block::bordered()
-        .title("Controls: Tab to select | Left/Righ: to change values");
+        .title(" Controls: Up/Down selects | Left/Righ: to change values");
+        .border_style(Style::default().fg(border_color));
 
         let inside = border.inner(area);
         frame.render_widget(border, area);
@@ -34,7 +45,7 @@ pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
             ])
             .split(rows[index]);
 
-            let selected  = index == app.control;
+            let selected  = focused && index == app.control;
 
             let color = if selected {
                 Color::Cyan

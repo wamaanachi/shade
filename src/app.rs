@@ -3,6 +3,12 @@ use std::time::{Duration, Instant};
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use ratatui::DefaultTerminal;
 
+#[derive(PartialEq)]
+pub enum focus {
+    Gallery,
+    Controls,
+}
+
 pub struct App {
     pub selected: usize,
     pub control: usize,
@@ -11,6 +17,7 @@ pub struct App {
     pub fullscreen: bool,
     pub paused: bool,
     pub time: f32,
+    pub focus: Focus,
 }
 
 // im lowk gonna be building the importtant things now
@@ -35,6 +42,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         fullscreen: false,
         paused: false,
         time: 0.0,
+        focus: Focus::Gallery,
     };
 
     let shader_count = crate::shaders::name().len();
@@ -78,29 +86,54 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
             match key.code {
                 KeyCode::Char('q') => return Ok(()),
 
+                // gonna have to rerwite all of those, because of the feature im making
+                // it is js focusing on one thing, contols or shaders
+
+                KeyCode::Tab => {
+                    app.focus = if app.focus == Focus::Gallery {
+                        Focus::Controls
+                    }
+                    else {
+                        Focus::Gallery
+                    };
+
                 KeyCode::Down => {
-                    if app.selected + 1 < shader_count {
-                        app.selected += 1;
+                    if app.focus == Focus::Gallery {
+                        if app.selected + 1 < shader_count {
+                            app.selected += 1;
+                        }
                     }
-                }
-
+                        else {
+                            if app.control < 3 {
+                                app.contol += 1;
+                            }
+                        }
+                    }
                 KeyCode::Up => {
-                    if app.selected > 0 {
-                        app.selected -= 1;
+                    if app.focus == Focus::Gallery {
+                        if app.selected > 0 {
+                            app.selected -= 1;
+                        }
+                    }
+                }
+                KeyCode::Left => {
+                    if app.focus == Focus::Controls {
+                        change_control(&mut app, -0.1);
                     }
                 }
 
-                KeyCode::Tab  => {
-                    app.control = (app.control + 1) % 4;
+                KeyCode::Right => {
+                    if app.focus  == Focus::Controls {
+                        change_control(&mut app, 0.1);
+                    }
                 }
-
-                KeyCode::Left => change_control(&mut app, -0.1),
-                KeyCode::Right => change_control(&mut app, 0.1),
 
                 KeyCode::Char('r') => {
-                    app.values = [1.0, 1.0, 0.0, 1.0];
+                    if app.focus == Focus::Controls {
+                        app.values = [1.0, 1.0, 0.0. 1.0];
+                    }
                 }
-
+                }
                 KeyCode::Char('f') => {
                     app.fullscreen = !app.fullscreen;
                 }
