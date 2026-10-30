@@ -10,5 +10,6 @@ pub mod config;
 pub mod cli;
 
 fn main() {
+    cli::parse::parse();
     println!("Hello, world!");
 }
