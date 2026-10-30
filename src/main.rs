@@ -3,12 +3,12 @@ use std::{
     time::Instant,
 };
 
-use crate::shaders::{Shader, ShaderParams, tunnel::CyberTunnel};
+use crate::shaders::{Shader, ShaderParams, mountains::Mountains};
 
 pub mod shaders;
 
 fn main() {
-    let shader = CyberTunnel;
+    let shader = Mountains;
     let params = ShaderParams::default();
     let start = Instant::now();
     let mut stdout = stdout();
