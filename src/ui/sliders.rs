@@ -7,7 +7,7 @@ use ratatui::{
 
 use crate::app::{App, Focus};
 
-pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
+pub fn draw(frame: &mut Frame, area: Rect,  app: &mut App){
 
     let focused = app.focus == Focus::Controls;
 
@@ -44,6 +44,8 @@ pub fn draw(frame: &mut Frame, area: Rect,  app: &App){
                 Constraint::Min(0),
             ])
             .split(rows[index]);
+
+            app.slider_areas[index] = columns[1];
 
             let selected  = focused && index == app.control;
 

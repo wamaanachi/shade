@@ -24,7 +24,7 @@ pub struct App {
     pub paused: bool,
     pub time: f32,
     pub focus: Focus,
-    pub sliders_areas: [Rect; 4],
+    pub slider_areas: [Rect; 4],
     pub dragging: Option<usize>,
 }
 
@@ -62,7 +62,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         paused: false,
         time: 0.0,
         focus: Focus::Gallery,
-        sliders_areas: [Rect::default(); 4],
+        slider_areas: [Rect::default(); 4],
         dragging: None,
     };
 
@@ -102,7 +102,14 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         }
 
     if event::poll(Duration::ZERO)?{
-        if let Event::Key(key) = event::read()? {
+        
+        let input = event::read()?;
+
+        if let Event::Mouse(mouse) = &input {
+            handle_mouse(&mut app, mouse);
+        }
+
+        if let Event::Key(key) = input {
             if key.kind == KeyEventKind::Press {
             match key.code {
                 KeyCode::Char('q') => return Ok(()),

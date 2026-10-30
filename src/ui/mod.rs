@@ -9,7 +9,13 @@ use ratatui::{
 
 use crate::app::{App, Focus};
 
-pub fn draw(frame: &mut Frame, app: &App){
+pub fn draw(frame: &mut Frame, app: &mut App){
+
+    app.slider_areas = [Rect::default(); 4];
+
+    if app.fullscreen || frame.area().width < 80 || frame.area().height < 20 {
+        app.dragging = None;
+    }
 
     let area = frame.area();
 
