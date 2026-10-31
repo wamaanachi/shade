@@ -9,6 +9,7 @@ pub(crate) const APP_NAME: &str = "shade";
 // --- FILES ---
 pub(crate) const SHADER_LIST: &str = "shaders.json";
 
+
 pub(crate) fn load_config() {
     todo!(
         "load config from the config file"
@@ -41,7 +42,7 @@ fn get_base_dir() -> Result<BaseDirs, u8> {
 
 
 // returns like
-fn get_app_dir() -> Result<PathBuf, u8> {
+pub(crate) fn get_app_dir() -> Result<PathBuf, u8> {
     let dirs: BaseDirs = get_base_dir()?;
 
     // Linux:   /home/user/.local/share

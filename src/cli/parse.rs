@@ -15,8 +15,8 @@ pub(crate) fn parse() {
         Command::List { .. } => {
             commands::list()
         }
-        Command::Save {} => {
-            commands::save()
+        Command::Save { name } => {
+            commands::save(name)
         }
     }
 }

@@ -29,7 +29,9 @@ pub(crate) enum Command {
         #[command(subcommand)]
         list_what: ListWhat,
     },
-    Save {}
+    Save {
+        name: String,
+    }
 }
 
 #[derive(Subcommand, Debug, Clone)]
