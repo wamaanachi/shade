@@ -1,3 +1,8 @@
+pub fn name() -> [&'static str; 1]{
+    // umm yeah
+    ["Plasma Neon"]
+}
+
 pub mod plasma;
 
 #[derive(Clone, Copy, Debug, PartialEq)]

@@ -1,3 +1,7 @@
+mod app;
+mod ui;
+mod shaders;
+
 use std::{
     io::{Write, stdout},
     time::Instant,
@@ -5,9 +9,20 @@ use std::{
 
 use crate::shaders::{Shader, ShaderParams, plasma::NeonPlasma};
 
-pub mod shaders;
+fn main() -> std::io::Result<()> {
+    let demo = std::env::args().any(|argument| argument == "--demo");
 
-fn main() {
+    if demo {
+        run_demo();
+    }
+    else {
+        app::run()?;
+    }
+    
+        Ok(())
+}
+
+fn run_demo() {
     let shader = NeonPlasma;
     let params = ShaderParams::default();
     let start = Instant::now();
