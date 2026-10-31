@@ -41,6 +41,7 @@ pub struct ShaderParams {
     pub zoom: f32,        //like fromm 0.5x to 5.0x
     pub color_shift: f32, //will change the phase in pallete
     pub intensity: f32,   // to adjust brightness/contrast
+    pub aspect_ratio: f32,
 }
 
 impl Default for ShaderParams {
@@ -50,6 +51,7 @@ impl Default for ShaderParams {
             zoom: 1.0,
             color_shift: 1.0,
             intensity: 1.0,
+            aspect_ratio: 1.0,
         }
     }
 }

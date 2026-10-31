@@ -75,29 +75,26 @@ impl Shader for Mountains {
             }
         }
 
+        let max_x = params.aspect_ratio + 0.2;
+        let total_span = max_x * 2.0;
+
         // The mountain is looking awesome! We have snow on the fuji too!
         // Now time for petals! I will try with figuring out a single petal
 
-        let t = time * params.speed;
+        // -1.0 is jst starting point, reducing it from 1 to a slowed down time, and wrapping it
+        // with 2.2
+        let petal_x = (time * 0.2) % total_span - 1.2 + (time * 2.0).sin() * 0.05;
+        let petal_y = 1.0 - (time * 0.3) % 2.2;
 
-        for i in 0..6 {
-            let i_f = i as f32;
+        let dx = u - petal_x;
+        let dy = v - petal_y;
 
-            let p_time = t + i_f * 0.7; //now every petal will live it's own life
+        let p_dist = (dx * dx + dy * dy).sqrt();
 
-            //how petal moves on y coord
-            let petal_y = 0.9 - (p_time * 0.25) % 2.2;
-
-            //how petal moves on x axis
-            let x_loop = (p_time * 0.18 + i_f * 0.4) % 2.4;
-            let petal_x = (x_loop - 1.2) + (p_time * 2.0 + i_f).sin() * 0.05;
-
-            let p_dist = ((u - petal_x).powi(2) + (v - petal_y).powi(2)).sqrt();
-
-            if p_dist < 0.025 {
-                col = [0.98, 0.72, 0.80];
-            }
+        if p_dist < 0.06 {
+            col = [0.98, 0.72, 0.80];
         }
+
         Color::from_normalized(col[0], col[1], col[2])
     }
 }
