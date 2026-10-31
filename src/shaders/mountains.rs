@@ -33,7 +33,7 @@ impl Shader for Mountains {
 
         // v from (u, v) dictates values on y axis, let's make modify color of that part
         //
-        // So What I tried to do is called lerp (hehe), like linear interpolation
+        // So What I tried to do is called lerp (hehe we are lerp-ing), like linear interpolation
         // and hence I will jst move lerp-ing into separate function
         let mut t = ((v + 1.0) / 2.0).clamp(0.0, 1.0);
         t = t.powf(1.5);
@@ -67,11 +67,19 @@ impl Shader for Mountains {
         let mountain_h = 0.35 - (x - 0.08).powf(0.85) * 0.8;
 
         if v < mountain_h {
-            let snowline = -0.25 + (u * 25.0).sin() * 0.03;
+            let big_ridges = (u * 12.0).sin() * 0.04;
+            let sharp_cracks = (u * 35.0).sin() * 0.015;
+            let micro_teeth = (u * 80.0).sin() * 0.006;
+
+            let snowline = -0.25 + big_ridges + sharp_cracks + micro_teeth;
+            let rock_t = ((v - (-1.0)) / (snowline - (-1.0))).clamp(0.0, 1.0);
+
+            let mist_base = [0.25, 0.40, 0.52];
+            let deep_indigo = [0.12, 0.20, 0.36];
             if v > snowline {
                 col = [0.95, 0.95, 0.98];
             } else {
-                col = [0.45, 0.15, 0.12];
+                col = lerp(mist_base, deep_indigo, rock_t);
             }
         }
 
