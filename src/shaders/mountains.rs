@@ -75,24 +75,42 @@ impl Shader for Mountains {
             }
         }
 
-        let max_x = params.aspect_ratio + 0.2;
-        let total_span = max_x * 2.0;
-
         // The mountain is looking awesome! We have snow on the fuji too!
         // Now time for petals! I will try with figuring out a single petal
+        //
+        // We need the petals to have no teleportation if widescreen, hence dynamic parameter
+        let max_x = params.aspect_ratio + 0.2;
+        let span_x = max_x * 2.0;
+        let span_y = 2.2;
 
-        // -1.0 is jst starting point, reducing it from 1 to a slowed down time, and wrapping it
-        // with 2.2
-        let petal_x = (time * 0.2) % total_span - 1.2 + (time * 2.0).sin() * 0.05;
-        let petal_y = 1.0 - (time * 0.3) % 2.2;
+        let num_petals = 7.0;
 
-        let dx = u - petal_x;
-        let dy = v - petal_y;
+        for i in 0..7 {
+            let i_f = i as f32;
 
-        let p_dist = (dx * dx + dy * dy).sqrt();
+            let p_time = time + i_f * (6.0 / num_petals);
 
-        if p_dist < 0.06 {
-            col = [0.98, 0.72, 0.80];
+            // -1.0 is jst starting point, reducing it from 1 to a slowed down time, and wrapping it
+            // with span_y, a dynamic value
+            let petal_y = 1.0 - (p_time * 0.35) % span_y;
+
+            //now we want natural drift to the petals, so I am gonna do some calculations
+            //previously we would jst calculate flutter and drift in one place, now I wanna
+            //separate them out
+
+            let lanes = (i_f / num_petals) * span_x;
+            let drift = (p_time * 0.2 + lanes) % span_x - max_x;
+            let flutter = (p_time * 2.5 + i_f).sin() * 0.04;
+            let petal_x = drift + flutter;
+
+            let dx = u - petal_x;
+            let dy = v - petal_y;
+
+            let p_dist = (dx * dx + dy * dy).sqrt();
+
+            if p_dist < 0.025 {
+                col = [0.98, 0.72, 0.80];
+            }
         }
 
         Color::from_normalized(col[0], col[1], col[2])
