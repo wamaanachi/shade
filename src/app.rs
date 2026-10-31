@@ -249,6 +249,34 @@ fn handle_mouse(app: &mut App, mouse: &MouseEvent){
         MouseEventKind::Up(MouseButton::Left) => {
             app.dragging = None;
         }
+
+    // so im gonna add scrolling for all the shaders cuz why not
+    // i tested the scrolling with fake shaders and it worked but deleted em later so rn its not umm doing anything as there is like 1 shader
+        MouseEventKind::ScrollDown | MouseEventKind::ScrollUp => {
+            let area = app.gallery_area;
+
+        // same ahh code repeatin
+            if mouse.column >= area.x
+                && mouse.column < area.right()
+                && mouse.row >= area.y
+                && mouse.row < area.bottom(){
+                    app.focus = Focus::Gallery;
+
+                    let count = crate::shaders::name().len();
+
+                    if mouse.kind == MouseEventKind::ScrollDown {
+                        if app.selected + 1 < count {
+                            app.selected += 1;
+                        }
+                    }
+                    else {
+                        if app.selected > 0 {
+                            app.selected -= 1;
+                        }
+                    }
+                }
+
+        }
         _ => {}
     }
 }
@@ -276,3 +304,5 @@ fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, inde
 
     app.values[index] = (value * 10.0).round() / 10.0;
 }
+
+
