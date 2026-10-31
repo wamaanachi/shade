@@ -119,9 +119,16 @@ impl Shader for Mountains {
             let dx = u - petal_x;
             let dy = v - petal_y;
 
-            let p_dist = (dx * dx + dy * dy).sqrt();
+            let angle = p_time * 2.5 + i_f * 1.8;
+            let cos_a = angle.cos();
+            let sin_a = angle.sin();
 
-            if p_dist < 0.025 {
+            let rx = dx * cos_a - dy * sin_a;
+            let ry = dx * sin_a + dy * cos_a;
+
+            let p_dist = ((rx * 2.0).powi(2) + ry.powi(2)).sqrt();
+
+            if p_dist < 0.04 {
                 col = [0.98, 0.72, 0.80];
             }
         }
