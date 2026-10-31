@@ -1,11 +1,15 @@
-use clap::{Parser, Subcommand};
+use clap::{Args, Parser, Subcommand};
 
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 pub(crate) struct CliArgs {
     #[command(subcommand)]
-    pub(crate) command: Command,
+    pub(crate) command: Option<Command>,
+}
 
+
+#[derive(Args, Debug, Clone)]
+pub(crate) struct ShaderArgs {
     #[arg(long)]
     pub(crate) shader: Option<String>,
 
@@ -16,21 +20,23 @@ pub(crate) struct CliArgs {
     pub(crate) intensity: Option<f32>,
 
     #[arg(long)]
-    color_intensity: Option<f32>,
+    pub(crate) color_shift: Option<f32>,
 }
 
 
 #[derive(Subcommand, Debug)]
 pub(crate) enum Command {
     Run {
-        shader: String,
+        #[command(flatten)]
+        run_what: ShaderArgs
     },
     List {
         #[command(subcommand)]
         list_what: ListWhat,
     },
     Save {
-        name: String,
+        #[command(flatten)]
+        save_what: ShaderArgs
     }
 }
 

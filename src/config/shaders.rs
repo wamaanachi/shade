@@ -11,15 +11,17 @@ fn get_shaders() -> Result<HashMap<String, ShaderParams>, u8> {
 
     let shaders_file = app_dir.join(SHADER_LIST);
 
-    let raw_shaders: String = if shaders_file.exists() {
-        match std::fs::read_to_string(shaders_file) {
-            Ok(s) => {s},
-            Err(_) => {
-                return Err(0);
-            }
+    if !shaders_file.exists() {
+        return Err(0);
+    }
+
+    let raw_shaders: String = match std::fs::read_to_string(shaders_file) {
+        Ok(s) => { s },
+        Err(_) => {
+            return Err(0);
         }
-    } else { return Err(0) };
-    
+    };
+
 
     let parsed_shaders = match serde_json::from_str(&raw_shaders) {
         Ok(s) => s,

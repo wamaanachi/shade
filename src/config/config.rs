@@ -52,7 +52,7 @@ pub(crate) fn get_app_dir() -> Result<PathBuf, u8> {
 
     let app_dir: PathBuf = data_dir.join(GROUP_NAME).join(APP_NAME);
     if !app_dir.exists() {
-        std::fs::create_dir_all(app_dir.clone()).unwrap();
+        std::fs::create_dir_all(app_dir.clone()).map_err(|_| {0})?;
     }
 
     Ok(app_dir)
