@@ -90,15 +90,20 @@ impl Shader for Mountains {
 
             let p_time = time + i_f * (6.0 / num_petals);
 
-            // -1.0 is jst starting point, reducing it from 1 to a slowed down time, and wrapping it
+            //also, let's add a speed_y variable, so there are variants in how petals fall
+            let speed_y = 0.30 + (i_f * 1.5).sin() * 0.08;
+
+            // 1.0 is jst starting point, reducing it from 1 to a slowed down time, and wrapping it
             // with span_y, a dynamic value
-            let petal_y = 1.0 - (p_time * 0.35) % span_y;
+            let petal_y = 1.0 - (p_time * speed_y) % span_y;
 
             //now we want natural drift to the petals, so I am gonna do some calculations
             //previously we would jst calculate flutter and drift in one place, now I wanna
             //separate them out
+            // I wanna scatter them out variably now...
+            let scatter = (i_f * 2.3).sin() * 0.5 - 0.5;
+            let lanes = scatter * span_x;
 
-            let lanes = (i_f / num_petals) * span_x;
             let drift = (p_time * 0.2 + lanes) % span_x - max_x;
             let flutter = (p_time * 2.5 + i_f).sin() * 0.04;
             let petal_x = drift + flutter;
