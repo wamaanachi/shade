@@ -238,7 +238,7 @@ fn handle_mouse(app: &mut App, mouse: &MouseEvent){
 fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, index: usize, column: u16){
     let area = app.slider_areas[index];
 
-    if app.width < 2 {
+    if area.width < 2 {
         return;
     }
 
@@ -252,7 +252,7 @@ fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, inde
 
         // bruh fuck this shit
         // why doesnt this shit work
-    let value = minimums[index] + ratio * (maximums[index]);
+    let value = minimums[index] + ratio * (maximums[index] - minimums[index]);
 
     app.values[index] = (value * 10.0).round() / 10.0;
 }
