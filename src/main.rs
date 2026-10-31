@@ -1,3 +1,7 @@
+mod app;
+mod shaders;
+mod ui;
+
 use std::{
     io::{Write, stdout},
     time::Instant,
@@ -5,9 +9,19 @@ use std::{
 
 use crate::shaders::{Shader, ShaderParams, mountains::Mountains};
 
-pub mod shaders;
+fn main() -> std::io::Result<()> {
+    let demo = std::env::args().any(|argument| argument == "--demo");
 
-fn main() {
+    if demo {
+        run_demo();
+    } else {
+        app::run()?;
+    }
+
+    Ok(())
+}
+
+fn run_demo() {
     let shader = Mountains;
     let params = ShaderParams::default();
     let start = Instant::now();
