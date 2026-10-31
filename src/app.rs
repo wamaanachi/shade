@@ -26,6 +26,7 @@ pub struct App {
     pub focus: Focus,
     pub slider_areas: [Rect; 4],
     pub dragging: Option<usize>,
+    pub gallery_area: Rect,
 }
 
 // im lowk gonna be building the importtant things now
@@ -64,6 +65,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         focus: Focus::Gallery,
         slider_areas: [Rect::default(); 4],
         dragging: None,
+        gallery_area: Rect::default(),
     };
 
     let shader_count = crate::shaders::name().len();
@@ -198,6 +200,24 @@ fn handle_mouse(app: &mut App, mouse: &MouseEvent){
     match mouse.kind {
         MouseEventKind::Down(MouseButton::Left) => {
             app.dragging = None;
+
+            let area = app.gallery_area;
+
+            // umm its like almost the same code i wrote for the slider thing or mouse
+            if mouse.column >= area.x
+                && mouse.column < area.right()
+                && mouse.row >= area.y
+                && mouse.row < area.bottom() {
+                    app.focus = Focus::Gallery;
+
+                    let index = (mouse.row - area.y) as usize;
+
+                    if index < crate::shaders::name().len(){
+                        app.selected = index;
+                    }
+
+                    return;
+                }
 
             for index in 0..4 {
                 let area = app.slider_areas[index];

@@ -13,6 +13,8 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
     app.slider_areas = [Rect::default(); 4];
 
+    app.gallery_area = Rect::default();
+
     if app.fullscreen || frame.area().width < 80 || frame.area().height < 20 {
         app.dragging = None;
     }
@@ -80,6 +82,8 @@ pub fn draw(frame: &mut Frame, app: &mut App){
     let gallery_border = Block::bordered()
         .title(" Shaders ")
         .border_style(Style::default().fg(gallery_color));
+
+        app.gallery_area = gallery_border.inner(columns[0]);
 
     let shader_list = List::new(names)
             .block(gallery_border)
