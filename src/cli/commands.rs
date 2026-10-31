@@ -6,6 +6,6 @@ pub(crate) fn list() {
     todo!()
 }
 
-pub(crate) fn save() {
+pub(crate) fn save(name: String) {
     todo!()
 }
