@@ -1,29 +1,28 @@
 mod app;
-mod ui;
 mod shaders;
+mod ui;
 
 use std::{
     io::{Write, stdout},
     time::Instant,
 };
 
-use crate::shaders::{Shader, ShaderParams, plasma::NeonPlasma};
+use crate::shaders::{Shader, ShaderParams, mountains::Mountains};
 
 fn main() -> std::io::Result<()> {
     let demo = std::env::args().any(|argument| argument == "--demo");
 
     if demo {
         run_demo();
-    }
-    else {
+    } else {
         app::run()?;
     }
-    
-        Ok(())
+
+    Ok(())
 }
 
 fn run_demo() {
-    let shader = NeonPlasma;
+    let shader = Mountains;
     let params = ShaderParams::default();
     let start = Instant::now();
     let mut stdout = stdout();
