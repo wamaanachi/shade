@@ -10,6 +10,7 @@ pub(crate) struct CliArgs {
 
 #[derive(Args, Debug, Clone)]
 pub(crate) struct ShaderArgs {
+    /// Shader Name
     #[arg(long)]
     pub(crate) shader: Option<String>,
 
@@ -27,8 +28,7 @@ pub(crate) struct ShaderArgs {
 #[derive(Subcommand, Debug)]
 pub(crate) enum Command {
     Run {
-        #[command(flatten)]
-        run_what: ShaderArgs
+        run_what: String,
     },
     List {
         #[command(subcommand)]

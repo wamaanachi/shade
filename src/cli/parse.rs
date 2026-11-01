@@ -5,18 +5,18 @@ use crate::cli::commands;
 pub(crate) fn parse() {
     let args: CliArgs = CliArgs::parse();
 
-    let command = args.command;
+    let command = args.command.unwrap();
 
     match command {
-        Command::Run { shader } => {
-            commands::run(shader)
+        Command::Run { run_what } => {
+            commands::run(run_what)
         }
 
         Command::List { .. } => {
             commands::list()
         }
-        Command::Save { name } => {
-            commands::save(name)
+        Command::Save { save_what } => {
+            commands::save(save_what)
         }
     }
 }
