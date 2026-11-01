@@ -2,9 +2,12 @@ use core::f32;
 
 use crate::shaders::{Color, Shader, ShaderParams};
 
+/// Unit struct, only check for it's implementation.
 #[derive(Debug)]
 pub struct NeonPlasma;
 
+/// source: https://iquilezles.org/articles/palettes/
+/// ^^ thank you for this goated formula
 fn palette(t: f32) -> [f32; 3] {
     let a: [f32; 3] = [0.500, 0.500, 0.500];
     let b: [f32; 3] = [0.500, 0.500, 0.500];
