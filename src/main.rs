@@ -1,6 +1,6 @@
 mod app;
-mod ui;
 mod shaders;
+mod ui;
 
 use std::{
     io::{Write, stdout},
@@ -18,16 +18,15 @@ fn main() -> std::io::Result<()> {
 
     if demo {
         run_demo();
-    }
-    else {
+    } else {
         app::run()?;
     }
-    
-        Ok(())
+
+    Ok(())
 }
 
 fn run_demo() {
-    let shader = NeonPlasma;
+    let shader = Mountains;
     let params = ShaderParams::default();
     let start = Instant::now();
     let mut stdout = stdout();
