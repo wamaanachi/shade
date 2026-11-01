@@ -12,9 +12,7 @@ pub mod cli;
 
 
 fn main() -> std::io::Result<()> {
-    if !parse::parse() {
-        app::run()?;
-    }
+    parse::parse()?;
 
     Ok(())
 }

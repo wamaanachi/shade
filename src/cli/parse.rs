@@ -1,13 +1,13 @@
 use clap::Parser;
 use crate::cli::cli::{CliArgs, Command};
 use crate::cli::commands;
-use crate::run_demo;
+use crate::{app, run_demo};
 
-pub(crate) fn parse() -> bool {
+pub(crate) fn parse() -> std::io::Result<()> {
     let args: CliArgs = CliArgs::parse();
 
     if args.command.is_none() && !args.demo {
-        return false;
+        app::run()?;
     }
 
     let command = args.command.unwrap();
@@ -38,5 +38,5 @@ pub(crate) fn parse() -> bool {
         run_demo()
     }
 
-    true
+    Ok(())    
 }
