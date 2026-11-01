@@ -329,4 +329,50 @@ fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, inde
     app.values[index] = (value * 10.0).round() / 10.0;
 }
 
-// looks like i already deleted all those comments that i wrote
+fn edit_value(app: &mut App, key: KeyCode){
+    match key {
+        KeyCode::Esc => {
+            app.editing = false;
+        }
+
+        KeyCode::Backspace => {
+            app.input.pop();
+            app.input_error.clear();
+        }
+
+        KeyCode::Char(character) => {
+            if app.input.len() < 12 {
+                app.input.push(character);
+                app.input_error.clear();
+            }
+        }
+
+        KeyCode::Enter => {
+            let minimums = [0.5, 0.5, 0.0, 0.0];
+            let maximums = [3.0, 5.0, 1.0, 2.0];
+            let index = app.control;
+
+            match app.input.parse::<f32>() {
+                Ok(value) => {
+                    if value.is_finite()
+                        && value >= minimums[index]
+                        && value <= maximums[index]
+                        {
+                            app.values[index] = value;
+                            app.editing = false;
+                        }
+                        else {
+                            app.input_error = format!(
+                                "Use a value from {} to {}",
+                                minimums[index], maximums[index],
+                            );
+                        }
+            }
+            Err(_)  => {
+                app.input_error = String::from("type a number");
+            }
+        }
+    }
+    _ => {}
+}
+}
