@@ -11,9 +11,13 @@ use crate::app::{App, Focus};
 pub fn draw(frame: &mut Frame, area: Rect, app: &App){
     // pretty easy to understand but lemme tell you, its just what text to show depending
     // on the thing ur focused
-    let hints = if app.focus == Focus::Gallery {
+    let hints = if !app.show_controls {
+        "Up/Down: shader | Scroll: browse | c: show controls"
+    }
+    else if app.focus == Focus::Gallery {
         "Up/Down: shader | Scroll: browse | Tab: controls"
     }
+
     else {
         "Up/Down: slider | Left/Right: adjust | Enter: type | r: reset | Tab: gallery"
     };
@@ -22,7 +26,7 @@ pub fn draw(frame: &mut Frame, area: Rect, app: &App){
 
     let text = format!(
     // the samee thing that i wrote before, but now it will switch
-        "{}\nf: fullscreen | Space: pause | q: quit | UI FPS: {:.1} | {}x{} cells",
+        "{}\nc: controls | f: fullscreen | Space: pause | q: quit | UI FPS: {:.1} | {}x{} cells",
         hints,
         app.fps,
         screen.width,

@@ -65,9 +65,10 @@ pub fn draw(frame: &mut Frame, app: &mut App){
     ])
     .split(rows[1]);
 
+    let controls_height =  if app.show_controls { 6 } else { 0 };
         let right = Layout::vertical([
             Constraint::Min(0),
-            Constraint::Length(6), // might change this again tbh
+            Constraint::Length(controls_height),
         ])
         .split(columns[1]);
 
@@ -107,7 +108,9 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
             draw_preview(frame, right[0], app);
 
+        if app.show_controls {
             sliders::draw(frame, right[1], app);
+        }
 
             // check ui/sliders.rs, i decided to replace the plain texts with sliders which look so cool
             // so umm this is just no longer required

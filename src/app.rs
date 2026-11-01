@@ -30,6 +30,7 @@ pub struct App {
     pub editing: bool,
     pub input: String,
     pub input_error: String,
+    pub show_controls:  bool,
 }
 
 // im lowk gonna be building the importtant things now
@@ -72,6 +73,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         editing: false,
         input: String::new(),
         input_error: String::new(),
+        show_controls: true,
     };
 
     let shader_count = crate::shaders::name().len();
@@ -130,7 +132,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                 // it is js focusing on one thing, contols or shaders
 
                 KeyCode::Tab => {
-                    app.focus = if app.focus == Focus::Gallery {
+                    app.focus = if app.show_controls && app.focus == Focus::Gallery {
                         Focus::Controls
                     }
                     else {
@@ -190,6 +192,15 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                         app.editing = true;
                         app.input.clear();
                         app.input_error.clear();
+                        app.dragging = None;
+                    }
+                }
+
+                KeyCode::Char('c') => {
+                    app.show_controls = !app.show_controls;
+
+                    if !app.show_controls {
+                        app.focus  = Focus::Gallery;
                         app.dragging = None;
                     }
                 }
