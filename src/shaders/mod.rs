@@ -6,7 +6,14 @@ pub fn name() -> [&'static str; 1]{
 
 pub mod plasma;
 pub mod show;
+pub mod mountains;
+pub mod tunnel;
 
+pub fn name() -> [&'static str; 3] {
+    ["Plasma Neon", "Cyber Tunnel", "Misty Mountains"]
+}
+
+/// The RGB Channel Color bytes
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Color {
     pub r: u8,
@@ -36,13 +43,16 @@ impl Color {
     }
 }
 
-/// Paramter's that TUI can adjust on sliders
+/// Parameters that TUI can adjust on sliders
+/// Y'all can also probably store some presets
+/// of values in this struct
 #[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct ShaderParams {
-    pub speed: f32,       //like, from 0.5x to 3.0x
-    pub zoom: f32,        //like fromm 0.5x to 5.0x
-    pub color_shift: f32, //will change the phase in pallete
+    pub speed: f32,       // like, from 0.5x to 3.0x
+    pub zoom: f32,        // like from 0.5x to 5.0x
+    pub color_shift: f32, // will change the phase in palette
     pub intensity: f32,   // to adjust brightness/contrast
+    pub aspect_ratio: f32,
 }
 
 impl Default for ShaderParams {
@@ -52,6 +62,7 @@ impl Default for ShaderParams {
             zoom: 1.0,
             color_shift: 1.0,
             intensity: 1.0,
+            aspect_ratio: 1.0,
         }
     }
 }
@@ -59,5 +70,6 @@ impl Default for ShaderParams {
 pub trait Shader {
     fn name(&self) -> &'static str;
 
+    /// The real rendering logic, in openGL, this would be mainImage()
     fn evaluate(&self, uv: (f32, f32), time: f32, params: &ShaderParams) -> Color;
 }
