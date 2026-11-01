@@ -7,9 +7,13 @@ use std::{
     time::Instant,
 };
 
-use crate::shaders::{Shader, ShaderParams, mountains::Mountains};
+use crate::shaders::{Shader, ShaderParams, plasma::NeonPlasma};
+pub mod config;
+pub mod cli;
 
 fn main() -> std::io::Result<()> {
+    cli::parse::parse();
+  
     let demo = std::env::args().any(|argument| argument == "--demo");
 
     if demo {

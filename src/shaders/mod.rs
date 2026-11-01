@@ -1,5 +1,12 @@
-pub mod mountains;
+use serde::{ Deserialize, Serialize };
+pub fn name() -> [&'static str; 1]{
+    // umm yeah
+    ["Plasma Neon"]
+}
+
 pub mod plasma;
+pub mod show;
+pub mod mountains;
 pub mod tunnel;
 
 pub fn name() -> [&'static str; 3] {
@@ -39,7 +46,7 @@ impl Color {
 /// Parameters that TUI can adjust on sliders
 /// Y'all can also probably store some presets
 /// of values in this struct
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Serialize, Deserialize)]
 pub struct ShaderParams {
     pub speed: f32,       // like, from 0.5x to 3.0x
     pub zoom: f32,        // like from 0.5x to 5.0x
