@@ -1,4 +1,5 @@
 mod sliders;
+mod value_input;
 
 use ratatui::{
     Frame,
@@ -14,6 +15,11 @@ pub fn draw(frame: &mut Frame, app: &mut App){
     app.slider_areas = [Rect::default(); 4];
 
     app.gallery_area = Rect::default();
+
+    if app.editing {
+        value_input::draw(frame, app);
+        return;
+    }
 
     if app.fullscreen || frame.area().width < 80 || frame.area().height < 20 {
         app.dragging = None;
