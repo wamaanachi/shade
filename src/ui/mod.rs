@@ -1,15 +1,15 @@
 mod sliders;
 mod value_input;
 mod footer;
+mod gallery;
 
 use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Style},
-    widgets::{Block, List, ListState, Paragraph},
+    widgets::{Block, Paragraph},
 };
 
-use crate::app::{App, Focus};
+use crate::app::App;
 
 pub fn draw(frame: &mut Frame, app: &mut App){
 
@@ -47,8 +47,6 @@ pub fn draw(frame: &mut Frame, app: &mut App){
         return;
     }
 
-    let selected = app.selected;
-    
     let rows = Layout::vertical([
         Constraint::Length(3),
         Constraint::Min(0),
@@ -77,36 +75,11 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
     frame.render_widget(title, rows[0]);
 
-    let names = crate::shaders::name();
+    // umm deletd all that beacuse i wrote gallery.rs with the search box
 
-    // gallery is the thing with the sahders'names btw
-    let gallery_color = if app.focus == Focus::Gallery {
-        Color::Cyan
-    }
-    else {
-        Color::Gray
-    };
+            gallery::draw(frame, columns[0], app);
 
-    let gallery_border = Block::bordered()
-        .title(" Shaders ")
-        .border_style(Style::default().fg(gallery_color));
-
-        app.gallery_area = gallery_border.inner(columns[0]);
-
-    let shader_list = List::new(names)
-            .block(gallery_border)
-            .highlight_symbol("> ")
-            .highlight_style(
-                Style::default()
-                .fg(Color::Black)
-                .bg(gallery_color),
-            );
-    let mut list_state = ListState::default();
-    list_state.select(Some(selected));
-
-    frame.render_stateful_widget(shader_list, columns[0], &mut list_state);
-
-            draw_preview(frame, right[0], app);
+    draw_preview(frame, right[0], app);
 
         if app.show_controls {
             sliders::draw(frame, right[1], app);
