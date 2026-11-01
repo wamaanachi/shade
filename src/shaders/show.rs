@@ -1,17 +1,19 @@
 use std::io::{stdout, Write};
 use std::time::Instant;
-use crate::shaders::plasma::NeonPlasma;
 use crate::shaders::{Shader, ShaderParams};
 
-pub(crate) fn show() {
-    let shader = NeonPlasma;
-    let params = ShaderParams::default();
-    let start = Instant::now();
-    let mut stdout = stdout();
-
+pub(crate) fn show(shader: impl Shader, params: ShaderParams) {
     let (width, height) = (60, 30);
 
     print!("\x1b[?25l\x1b[2J");
+
+    print_shader(shader, params, (width, height));
+}
+
+
+fn print_shader(shader: impl Shader, params: ShaderParams, (width, height): (u8, u8)) {
+    let mut stdout = stdout();
+    let start = Instant::now();
 
     loop {
         let time = start.elapsed().as_secs_f32();
