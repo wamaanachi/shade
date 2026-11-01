@@ -11,3 +11,7 @@ pub(crate) fn list() {
 pub(crate) fn save(save_what: ShaderArgs) {
     todo!()
 }
+
+pub(crate) fn genshade() {
+    todo!()
+}

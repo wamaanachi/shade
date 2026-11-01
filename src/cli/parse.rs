@@ -15,8 +15,13 @@ pub(crate) fn parse() {
         Command::List { .. } => {
             commands::list()
         }
+
         Command::Save { save_what } => {
             commands::save(save_what)
+        }
+
+        Command::Genshade {} => {
+            commands::genshade()
         }
     }
 }
