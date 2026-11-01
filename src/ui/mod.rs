@@ -1,5 +1,6 @@
 mod sliders;
 mod value_input;
+mod footer;
 
 use ratatui::{
     Frame,
@@ -135,18 +136,9 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
 // so im going to replace he plain text with sliders, might delete the code soon
 
-        let area = frame.area();
+// deleted all that because i just wrote footer.rs which does the same thing but better
 
-        let footer_text = format!(
-            "Tab: panel | Up/Down: select | Left/Right: adjust | r: reset | f: fullscreen | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
-            app.fps,
-            area.width,
-            area.height,
-        );
-
-    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Cyan)); // cyan is cool!
-
-    frame.render_widget(footer, rows[2]);
+footer::draw(frame, rows[2], app);
 }
 
 fn draw_preview(frame: &mut Frame, area: Rect, app: &App){
