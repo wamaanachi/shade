@@ -27,6 +27,9 @@ pub struct App {
     pub slider_areas: [Rect; 4],
     pub dragging: Option<usize>,
     pub gallery_area: Rect,
+    pub editing: bool,
+    pub input: String,
+    pub input_error: String,
 }
 
 // im lowk gonna be building the importtant things now
@@ -66,6 +69,9 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         slider_areas: [Rect::default(); 4],
         dragging: None,
         gallery_area: Rect::default(),
+        editing: false,
+        input: String::new(),
+        input_error: String::new(),
     };
 
     let shader_count = crate::shaders::name().len();
@@ -113,6 +119,10 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
 
         if let Event::Key(key) = input {
             if key.kind == KeyEventKind::Press {
+                if app.editing {
+                    edit_value(&mut app, key.code);
+                }
+                else {
             match key.code {
                 KeyCode::Char('q') => return Ok(()),
 
@@ -174,11 +184,21 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                 KeyCode::Char(' ') => {
                     app.paused = !app.paused;
                 }
+
+                KeyCode::Enter => {
+                    if app.focus == Focus::Controls && !app.fullscreen {
+                        app.editing = true;
+                        app.input.clear();
+                        app.input_error.clear();
+                        app.dragging = None;
+                    }
+                }
                 _ => {}
                 }
             }
         }
     }
+  }
     let remaining = frame_time.saturating_sub(frame_start.elapsed());
     std::thread::sleep(remaining);
   }
@@ -197,6 +217,10 @@ fn change_control(app: &mut App, amount: f32){
 }
 
 fn handle_mouse(app: &mut App, mouse: &MouseEvent){
+
+    if app.editing {
+        return;
+    }
     match mouse.kind {
         MouseEventKind::Down(MouseButton::Left) => {
             app.dragging = None;
@@ -305,4 +329,4 @@ fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, inde
     app.values[index] = (value * 10.0).round() / 10.0;
 }
 
-
+// looks like i already deleted all those comments that i wrote
