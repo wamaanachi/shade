@@ -38,5 +38,5 @@ pub(crate) fn parse() -> std::io::Result<()> {
         run_demo()
     }
 
-    Ok(())    
+    Ok(())
 }
