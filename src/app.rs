@@ -31,6 +31,8 @@ pub struct App {
     pub input: String,
     pub input_error: String,
     pub show_controls:  bool,
+    pub searching: bool,
+    pub search: String,
 }
 
 // im lowk gonna be building the importtant things now
@@ -74,6 +76,8 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         input: String::new(),
         input_error: String::new(),
         show_controls: true,
+        searching: false,
+        search:  String::new(),
     };
 
     let shader_count = crate::shaders::name().len();
@@ -123,6 +127,9 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
             if key.kind == KeyEventKind::Press {
                 if app.editing {
                     edit_value(&mut app, key.code);
+                }
+                else if app.searching {
+                    edit_search(&mut app, key.code);
                 }
                 else {
             match key.code {
@@ -204,6 +211,19 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
                         app.dragging = None;
                     }
                 }
+
+                // adding the search feature, lowk not necessary but would look cool ig
+                KeyCode::Char('/') => {
+                    if !app.fullscreen {
+                        app.searching  = true;
+                        app.focus = Focus::Gallery;
+                        app.dragging = None;
+                    }
+                }
+
+                KeyCode::Esc => {
+                    app.search.clear();
+                }
                 _ => {}
                 }
             }
@@ -229,7 +249,7 @@ fn change_control(app: &mut App, amount: f32){
 
 fn handle_mouse(app: &mut App, mouse: &MouseEvent){
 
-    if app.editing {
+    if app.editing || app.searching {
         return;
     }
     match mouse.kind {
@@ -387,3 +407,27 @@ fn edit_value(app: &mut App, key: KeyCode){
     _ => {}
 }
 }
+
+fn edit_search(app: &mut App, key: KeyCode){
+    match key {
+        KeyCode::Enter => {
+            app.searching = false;
+        }
+
+        KeyCode::Esc => {
+            app.searching = false;
+            app.search.clear();
+        }
+
+        KeyCode::Backspace => {
+            app.search.pop();
+        }
+
+        KeyCode::Char(character) => {
+                if app.search.len() < 30 {
+                    app.search.push(character);
+                }
+            }
+            _ => {}
+        }
+    }
