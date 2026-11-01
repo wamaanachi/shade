@@ -1,8 +1,4 @@
 use serde::{ Deserialize, Serialize };
-pub fn name() -> [&'static str; 1]{
-    // umm yeah
-    ["Plasma Neon"]
-}
 
 pub mod plasma;
 pub mod show;

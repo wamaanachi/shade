@@ -1,17 +1,26 @@
 mod sliders;
+mod value_input;
+mod footer;
+mod gallery;
 
 use ratatui::{
     Frame,
     layout::{Constraint, Layout, Rect},
-    style::{Color, Style},
-    widgets::{Block, List, ListState, Paragraph},
+    widgets::{Block, Paragraph},
 };
 
-use crate::app::{App, Focus};
+use crate::app::App;
 
 pub fn draw(frame: &mut Frame, app: &mut App){
 
     app.slider_areas = [Rect::default(); 4];
+
+    app.gallery_area = Rect::default();
+
+    if app.editing {
+        value_input::draw(frame, app);
+        return;
+    }
 
     if app.fullscreen || frame.area().width < 80 || frame.area().height < 20 {
         app.dragging = None;
@@ -38,8 +47,6 @@ pub fn draw(frame: &mut Frame, app: &mut App){
         return;
     }
 
-    let selected = app.selected;
-    
     let rows = Layout::vertical([
         Constraint::Length(3),
         Constraint::Min(0),
@@ -56,9 +63,10 @@ pub fn draw(frame: &mut Frame, app: &mut App){
     ])
     .split(rows[1]);
 
+    let controls_height =  if app.show_controls { 6 } else { 0 };
         let right = Layout::vertical([
             Constraint::Min(0),
-            Constraint::Length(6), // might change this again tbh
+            Constraint::Length(controls_height),
         ])
         .split(columns[1]);
 
@@ -67,36 +75,15 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
     frame.render_widget(title, rows[0]);
 
-    let names = crate::shaders::name();
+    // umm deletd all that beacuse i wrote gallery.rs with the search box
 
-    // gallery is the thing with the sahders'names btw
-    let gallery_color = if app.focus == Focus::Gallery {
-        Color::Cyan
-    }
-    else {
-        Color::Gray
-    };
+            gallery::draw(frame, columns[0], app);
 
-    let gallery_border = Block::bordered()
-        .title(" Shaders ")
-        .border_style(Style::default().fg(gallery_color));
+    draw_preview(frame, right[0], app);
 
-    let shader_list = List::new(names)
-            .block(gallery_border)
-            .highlight_symbol("> ")
-            .highlight_style(
-                Style::default()
-                .fg(Color::Black)
-                .bg(gallery_color),
-            );
-    let mut list_state = ListState::default();
-    list_state.select(Some(selected));
-
-    frame.render_stateful_widget(shader_list, columns[0], &mut list_state);
-
-            draw_preview(frame, right[0], app);
-
+        if app.show_controls {
             sliders::draw(frame, right[1], app);
+        }
 
             // check ui/sliders.rs, i decided to replace the plain texts with sliders which look so cool
             // so umm this is just no longer required
@@ -125,18 +112,9 @@ pub fn draw(frame: &mut Frame, app: &mut App){
 
 // so im going to replace he plain text with sliders, might delete the code soon
 
-        let area = frame.area();
+// deleted all that because i just wrote footer.rs which does the same thing but better
 
-        let footer_text = format!(
-            "Tab: panel | Up/Down: select | Left/Right: adjust | r: reset | f: fullscreen | q: quit\nFPS: {:.1} | Terminal: {} x {} cells",
-            app.fps,
-            area.width,
-            area.height,
-        );
-
-    let footer = Paragraph::new(footer_text).style(Style::default().fg(Color::Cyan)); // cyan is cool!
-
-    frame.render_widget(footer, rows[2]);
+footer::draw(frame, rows[2], app);
 }
 
 fn draw_preview(frame: &mut Frame, area: Rect, app: &App){

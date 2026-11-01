@@ -5,7 +5,11 @@ use crate::cli::commands;
 pub(crate) fn parse() {
     let args: CliArgs = CliArgs::parse();
 
-    let command = args.command.unwrap();
+    // that was panicking idk why
+    let command = match args.command {
+        Some(command) => command,
+        None => return
+    };
 
     match command {
         Command::Run { run_what } => {
