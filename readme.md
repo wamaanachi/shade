@@ -50,7 +50,7 @@ Or download from command line, like this:
 #### Linux
 
 ```shell
-curl -L https://github.com/wamaanachi/Shade/releases/download/Release/shade-1.0.0-x86_64-Linux -o shade
+curl -L https://github.com/wamaanachi/Shade/releases/download/Release/shade-0.1.0-x86_64-Linux -o shade
 chmod +x shade
 ```
 
