@@ -29,14 +29,13 @@ pub struct App {
 }
 
 // im lowk gonna be building the importtant things now
-pub fn run() -> io::Result<()>{
-
+pub fn run() -> io::Result<()> {
     let mut terminal = ratatui::init();
 
     let result = match crossterm::execute!(
         io::stdout(),
         EnableMouseCapture
-    ){
+    ) {
         Ok(()) => run_loop(&mut terminal),
         Err(error) => Err(error),
     };
@@ -49,10 +48,9 @@ pub fn run() -> io::Result<()>{
     ratatui::restore();
 
     result.and(cleanup)
-} 
+}
 
 fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
-
     let mut app = App {
         selected: 0,
         control: 0,
@@ -76,11 +74,10 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
     let mut previous_frame = Instant::now();
 
     loop {
-
         let frame_start = Instant::now();
 
         let listening_to_drake_rn = frame_start.duration_since(previous_frame).as_secs_f32();
-        
+
         previous_frame = frame_start;
 
         if !app.paused {
@@ -91,7 +88,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
             crate::ui::draw(frame, &mut app);
         })?;
 
-        frames +=1;
+        frames += 1;
 
         let elapsed = fps_timer.elapsed().as_secs_f32();
 
@@ -101,92 +98,89 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
             fps_timer = Instant::now();
         }
 
-    if event::poll(Duration::ZERO)?{
-        
-        let input = event::read()?;
+        if event::poll(Duration::ZERO)? {
+            let input = event::read()?;
 
-        if let Event::Mouse(mouse) = &input {
-            handle_mouse(&mut app, mouse);
-        }
+            if let Event::Mouse(mouse) = &input {
+                handle_mouse(&mut app, mouse);
+            }
 
-        if let Event::Key(key) = input {
-            if key.kind == KeyEventKind::Press {
-            match key.code {
-                KeyCode::Char('q') => return Ok(()),
+            if let Event::Key(key) = input {
+                if key.kind == KeyEventKind::Press {
+                    match key.code {
+                        KeyCode::Char('q') => return Ok(()),
 
-                // gonna have to rerwite all of those, because of the feature im making
-                // it is js focusing on one thing, contols or shaders
+                        // gonna have to rerwite all of those, because of the feature im making
+                        // it is js focusing on one thing, contols or shaders
 
-                KeyCode::Tab => {
-                    app.focus = if app.focus == Focus::Gallery {
-                        Focus::Controls
-                    }
-                    else {
-                        Focus::Gallery
-                    };
-                }
-
-                KeyCode::Down => {
-                    if app.focus == Focus::Gallery {
-                        if app.selected + 1 < shader_count {
-                            app.selected += 1;
+                        KeyCode::Tab => {
+                            app.focus = if app.focus == Focus::Gallery {
+                                Focus::Controls
+                            } else {
+                                Focus::Gallery
+                            };
                         }
-                    }
-                        else {
-                        // umm gonna make it so that the last control will take you to the first one when you press the up/down and vice versa. 
+
+                        KeyCode::Down => {
+                            if app.focus == Focus::Gallery {
+                                if app.selected + 1 < shader_count {
+                                    app.selected += 1;
+                                }
+                            } else {
+                                // umm gonna make it so that the last control will take you to the first one when you press the up/down and vice versa.
                                 app.control = (app.control + 1) % 4;
                             }
                         }
-                    
-                KeyCode::Up => {
-                    if app.focus == Focus::Gallery {
-                        if app.selected > 0 {
-                            app.selected -= 1;
+
+                        KeyCode::Up => {
+                            if app.focus == Focus::Gallery {
+                                if app.selected > 0 {
+                                    app.selected -= 1;
+                                }
+                            } else {
+                                app.control = (app.control + 3) % 4;
+                            }
                         }
-                    } else {
-                            app.control = (app.control + 3) % 4;
+                        KeyCode::Left => {
+                            if app.focus == Focus::Controls {
+                                change_control(&mut app, -0.1);
+                            }
                         }
-                }
-                KeyCode::Left => {
-                    if app.focus == Focus::Controls {
-                        change_control(&mut app, -0.1);
-                    }
-                }
 
-                KeyCode::Right => {
-                    if app.focus  == Focus::Controls {
-                        change_control(&mut app, 0.1);
-                    }
-                }
+                        KeyCode::Right => {
+                            if app.focus == Focus::Controls {
+                                change_control(&mut app, 0.1);
+                            }
+                        }
 
-                KeyCode::Char('r') => {
-                    if app.focus == Focus::Controls {
-                        app.values = [1.0, 1.0, 0.0, 1.0];
-                    }
-                }
-                
-                KeyCode::Char('f') => {
-                    app.fullscreen = !app.fullscreen;
-                }
+                        KeyCode::Char('r') => {
+                            if app.focus == Focus::Controls {
+                                app.values = [1.0, 1.0, 0.0, 1.0];
+                            }
+                        }
 
-                KeyCode::Char(' ') => {
-                    app.paused = !app.paused;
-                }
-                _ => {}
+                        KeyCode::Char('f') => {
+                            app.fullscreen = !app.fullscreen;
+                        }
+
+                        KeyCode::Char(' ') => {
+                            app.paused = !app.paused;
+                        }
+                        _ => {}
+                    }
                 }
             }
         }
+        let remaining = frame_time.saturating_sub(frame_start.elapsed());
+        std::thread::sleep(remaining);
     }
-    let remaining = frame_time.saturating_sub(frame_start.elapsed());
-    std::thread::sleep(remaining);
-  }
 }
 
-fn change_control(app: &mut App, amount: f32){
+fn change_control(app: &mut App, amount: f32) {
     // lowk im not sure about these, but too tired too ask rn will change em later ig
 
     let minimums = [0.5, 0.5, 0.0, 0.0];
-    let maximums = [3.0, 5.0, 1.0, 2.0]; 
+    let maximums = [3.0, 5.0, 1.0, 2.0];
 
     let index = app.control;
 
@@ -194,7 +188,7 @@ fn change_control(app: &mut App, amount: f32){
         .clamp(minimums[index], maximums[index]);
 }
 
-fn handle_mouse(app: &mut App, mouse: &MouseEvent){
+fn handle_mouse(app: &mut App, mouse: &MouseEvent) {
     match mouse.kind {
         MouseEventKind::Down(MouseButton::Left) => {
             app.dragging = None;
@@ -207,14 +201,14 @@ fn handle_mouse(app: &mut App, mouse: &MouseEvent){
                     && mouse.column < area.right()
                     && mouse.row >= area.y
                     && mouse.row < area.bottom()
-                    {
-                        app.focus = Focus::Controls;
-                        app.control = index;
-                        app.dragging = Some(index);
+                {
+                    app.focus = Focus::Controls;
+                    app.control = index;
+                    app.dragging = Some(index);
 
-                        the_function_for_the_functioning_of_mouse_from_the_slider(app, index, mouse.column);
-                        break;
-                    }
+                    the_function_for_the_functioning_of_mouse_from_the_slider(app, index, mouse.column);
+                    break;
+                }
             }
         }
         // bruhh this shi is taking so much time.
@@ -235,7 +229,7 @@ fn handle_mouse(app: &mut App, mouse: &MouseEvent){
 
 // lol
 
-fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, index: usize, column: u16){
+fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, index: usize, column: u16) {
     let area = app.slider_areas[index];
 
     if area.width < 2 {
@@ -250,8 +244,8 @@ fn the_function_for_the_functioning_of_mouse_from_the_slider(app: &mut App, inde
     let ratio = (position / (area.width - 1) as f32)
         .clamp(0.0, 1.0);
 
-        // bruh fuck this shit
-        // why doesnt this shit work
+    // bruh fuck this shit
+    // why doesnt this shit work
     let value = minimums[index] + ratio * (maximums[index] - minimums[index]);
 
     app.values[index] = (value * 10.0).round() / 10.0;
