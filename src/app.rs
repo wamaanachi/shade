@@ -453,9 +453,9 @@ fn edit_search(app: &mut App, key: KeyCode) {
 
 fn update_current_shader(app: &mut App) {
     match app.selected {
-        0 => app.current_shader = CurrentShader::Mountains(Mountains),
-        1 => app.current_shader = CurrentShader::Plasma(NeonPlasma),
-        2 => app.current_shader = CurrentShader::Tunnel(CyberTunnel),
-        _ => app.current_shader = CurrentShader::Mountains(Mountains),
+        0 => app.current_shader = CurrentShader::Plasma(NeonPlasma),
+        1 => app.current_shader = CurrentShader::Tunnel(CyberTunnel),
+        2 => app.current_shader = CurrentShader::Mountains(Mountains),
+        _ => app.current_shader = CurrentShader::Plasma(NeonPlasma),
     }
 }
