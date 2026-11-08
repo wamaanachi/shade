@@ -23,4 +23,7 @@ fn run_demo() {
     let params = ShaderParams::default();
     
     show(shader, params);
+    
+    // Sleep for 3 seconds to show the demo
+    std::thread::sleep(std::time::Duration::from_secs(3));
 }

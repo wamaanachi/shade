@@ -8,10 +8,10 @@ use crossterm::event::{
 };
 use ratatui::layout::Rect;
 
+use crate::shaders::Shader;
 use crate::shaders::mountains::Mountains;
 use crate::shaders::plasma::NeonPlasma;
 use crate::shaders::tunnel::CyberTunnel;
-use crate::shaders::Shader;
 
 #[derive(PartialEq)]
 pub enum Focus {
@@ -29,12 +29,17 @@ impl CurrentShader {
     pub fn name(&self) -> &'static str {
         match self {
             CurrentShader::Mountains(_) => "Misty Mountains",
-            CurrentShader::Plasma(_) => "Plasma Neon", 
+            CurrentShader::Plasma(_) => "Plasma Neon",
             CurrentShader::Tunnel(_) => "Cyber Tunnel",
         }
     }
 
-    pub fn evaluate(&self, uv: (f32, f32), time: f32, params: &crate::shaders::ShaderParams) -> crate::shaders::Color {
+    pub fn evaluate(
+        &self,
+        uv: (f32, f32),
+        time: f32,
+        params: &crate::shaders::ShaderParams,
+    ) -> crate::shaders::Color {
         match self {
             CurrentShader::Mountains(shader) => shader.evaluate(uv, time, params),
             CurrentShader::Plasma(shader) => shader.evaluate(uv, time, params),
@@ -99,7 +104,7 @@ fn run_loop(terminal: &mut DefaultTerminal) -> io::Result<()> {
         show_controls: true,
         searching: false,
         search: String::new(),
-        current_shader: CurrentShader::Mountains(crate::shaders::mountains::Mountains),
+        current_shader: CurrentShader::Plasma(crate::shaders::plasma::NeonPlasma),
     };
 
     let shader_count = crate::shaders::name().len();
@@ -453,9 +458,9 @@ fn edit_search(app: &mut App, key: KeyCode) {
 
 fn update_current_shader(app: &mut App) {
     match app.selected {
-        0 => app.current_shader = CurrentShader::Mountains(Mountains),
-        1 => app.current_shader = CurrentShader::Plasma(NeonPlasma),
-        2 => app.current_shader = CurrentShader::Tunnel(CyberTunnel),
-        _ => app.current_shader = CurrentShader::Mountains(Mountains),
+        0 => app.current_shader = CurrentShader::Plasma(NeonPlasma),
+        1 => app.current_shader = CurrentShader::Tunnel(CyberTunnel),
+        2 => app.current_shader = CurrentShader::Mountains(Mountains),
+        _ => app.current_shader = CurrentShader::Plasma(NeonPlasma),
     }
 }
