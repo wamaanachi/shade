@@ -5,6 +5,9 @@ use clap::{Args, Parser, Subcommand};
 pub(crate) struct CliArgs {
     #[command(subcommand)]
     pub(crate) command: Option<Command>,
+
+    #[arg(long)]
+    pub(crate) demo: bool,
 }
 
 
@@ -27,24 +30,25 @@ pub(crate) struct ShaderArgs {
 
 #[derive(Subcommand, Debug)]
 pub(crate) enum Command {
+    /// Runs specified shader
     Run {
-        run_what: String,
+        run_what: Option<String>,
     },
+    /// Lists all shaders available
     List {
         #[command(subcommand)]
-        list_what: ListWhat,
+        list_what: Option<ListWhat>,
     },
-    Save {
-        #[command(flatten)]
-        save_what: ShaderArgs
-    },
-    Genshade {}
+    // Save {
+    //     #[command(flatten)]
+    //     save_what: Option<ShaderArgs>
+    // },
+    // Genshade {}
 }
 
 #[derive(Subcommand, Debug, Clone)]
 pub(crate) enum ListWhat {
     Shaders {},
-    History {}
 }
 
 // • Amaan: CLI, Config & Systems:

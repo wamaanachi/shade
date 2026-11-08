@@ -1,13 +1,12 @@
 use serde::{ Deserialize, Serialize };
+pub fn name() -> [&'static str; 3] {
+    ["Plasma Neon", "Cyber Tunnel", "Misty Mountains"]
+}
 
 pub mod plasma;
 pub mod show;
 pub mod mountains;
 pub mod tunnel;
-
-pub fn name() -> [&'static str; 3] {
-    ["Plasma Neon", "Cyber Tunnel", "Misty Mountains"]
-}
 
 /// The RGB Channel Color bytes
 #[derive(Clone, Copy, Debug, PartialEq)]
