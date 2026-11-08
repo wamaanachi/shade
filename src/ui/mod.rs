@@ -2,6 +2,7 @@ mod sliders;
 mod value_input;
 mod footer;
 mod gallery;
+mod shader_preview;
 
 use ratatui::{
     Frame,
@@ -10,6 +11,7 @@ use ratatui::{
 };
 
 use crate::app::App;
+use crate::ui::shader_preview::ShaderPreview;
 
 pub fn draw(frame: &mut Frame, app: &mut App) {
     app.slider_areas = [Rect::default(); 4];
@@ -123,20 +125,6 @@ footer::draw(frame, rows[2], app);
 }
 
 fn draw_preview(frame: &mut Frame, area: Rect, app: &App) {
-    let names = crate::shaders::name();
-
-    let status = if app.paused { "Paused" } else { "Running" };
-
-    let text = format!(
-        // this shi is really confusing me
-        "Selected: {}\n\nStatus: {}\nTime: {:.1}s\n\nSpace: pause/resume | f: toggle fullscreen | q: quit",
-        names[app.selected],
-        status,
-        app.time,
-    );
-
-    let preview = Paragraph::new(text)
-        .block(Block::bordered().title(" Preview "));
-
-    frame.render_widget(preview, area);
+    let shader_preview = ShaderPreview { app };
+    frame.render_widget(shader_preview, area);
 }
